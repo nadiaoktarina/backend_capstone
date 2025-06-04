@@ -1,0 +1,332 @@
+[
+    {
+        "image": "../foodphoto/apple_pie.jpg",
+        "food": "apple pie",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/baby_back_ribs.jpg",
+        "food": "baby back ribs",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/baklava.jpg",
+        "food": "baklava",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/beef_carpaccio.jpg",
+        "food": "beef carpaccio",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/beignets.jpg",
+        "food": "beignets",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/bolognese.jpg",
+        "food": "bolognese",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/bread_pudding.jpg",
+        "food": "bread pudding",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/bruschetta.jpg",
+        "food": "bruschetta",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/burrito.jpg",
+        "food": "burrito",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/cannoli.jpg",
+        "food": "cannoli",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/carrot_cake.jpg",
+        "food": "carrot cake",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/ceviche.jpg",
+        "food": "ceviche",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/cheese_plate.jpg",
+        "food": "cheese plate",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/chicken_fajita.jpg",
+        "food": "chicken fajita",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/chicken_wings.jpg",
+        "food": "chicken wings",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/chocolate_lava.jpg",
+        "food": "chocolate lava",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/churros.jpg",
+        "food": "churros",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/club_sandwich.jpg",
+        "food": "club sandwich",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/creme_brulee.jpg",
+        "food": "creme brulee",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/crepe.jpg",
+        "food": "crepe",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/croissant.jpg",
+        "food": "croissant",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/cupcakes.jpg",
+        "food": "cupcakes",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/donuts.jpg",
+        "food": "donuts",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/edamame.jpg",
+        "food": "edamame",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/eggs_florentine.jpg",
+        "food": "eggs florentine",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/fajitas.jpg",
+        "food": "fajitas",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/fish_and_chips.jpg",
+        "food": "fish and chips",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/french_fry.jpg",
+        "food": "french fry",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/french_toast.jpg",
+        "food": "french toast",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/fried_chicken.jpg",
+        "food": "fried chicken",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/fried_rice.jpg",
+        "food": "fried rice",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/garlic_bread.jpg",
+        "food": "garlic bread",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/gnocchi.jpg",
+        "food": "gnocchi",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/greek_salad.jpg",
+        "food": "greek salad",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/grilled_salmon.jpg",
+        "food": "grilled salmon",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/gyros.jpg",
+        "food": "gyros",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/hamburger.jpg",
+        "food": "hamburger",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/hot_dog.jpg",
+        "food": "hot dog",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/hummus.jpg",
+        "food": "hummus",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/lasagna.jpg",
+        "food": "lasagna",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/lobster_roll.jpg",
+        "food": "lobster roll",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/macarons.jpg",
+        "food": "macarons",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/mussels.jpg",
+        "food": "mussels",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/omelette.jpg",
+        "food": "omelette",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/onion_rings.jpg",
+        "food": "onion rings",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/oysters.jpg",
+        "food": "oysters",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/pancakes.jpg",
+        "food": "pancakes",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/peking_duck.jpg",
+        "food": "peking duck",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/pizza.jpg",
+        "food": "pizza",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/pork_chop.jpg",
+        "food": "pork chop",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/poutine.jpg",
+        "food": "poutine",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/pulled_pork.jpg",
+        "food": "pulled pork",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/ravioli.jpg",
+        "food": "ravioli",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/risotto.jpg",
+        "food": "risotto",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/sashimi.jpg",
+        "food": "sashimi",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/scallops.jpg",
+        "food": "scallops",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/shrimp_boil.jpg",
+        "food": "shrimp boil",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/spaghetti.jpg",
+        "food": "spaghetti",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/spring_roll.jpg",
+        "food": "spring roll",
+        "category": "Diet"
+    },
+    {
+        "image": "../foodphoto/steak.jpg",
+        "food": "steak",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/sushi.jpg",
+        "food": "sushi",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/sushi_berry.jpg",
+        "food": "sushi berry",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/takoyaki.jpg",
+        "food": "takoyaki",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/tacos.jpg",
+        "food": "tacos",
+        "category": "Bulking"
+    },
+    {
+        "image": "../foodphoto/tuna_tartare.jpg",
+        "food": "tuna tartare",
+        "category": "Maintenance"
+    },
+    {
+        "image": "../foodphoto/waffles.jpg",
+        "food": "waffles",
+        "category": "Bulking"
+    }
+]
