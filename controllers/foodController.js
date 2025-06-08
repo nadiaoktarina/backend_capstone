@@ -1,21 +1,21 @@
-const fs = require("fs").promises;
-const path = require("path");
+const fs = require('fs').promises;
+const path = require('path');
 
 class FoodService {
   constructor() {
     this.foodData = null;
-    this.dataPath = path.join(__dirname, "../data/food_categories.json");
+    this.dataPath = path.join(__dirname, '../data/food_categories.json');
   }
 
   async loadData() {
     try {
-      const data = await fs.readFile(this.dataPath, "utf8");
-      this.foodData = JSON.parse(data).map((item) => ({
+      const data = await fs.readFile(this.dataPath, 'utf8');
+      this.foodData = JSON.parse(data).map(item => ({
         ...item,
-        category: item.category.toLowerCase(),
+        category: item.category.toLowerCase()
       }));
     } catch (error) {
-      console.error("Error loading food data:", error);
+      console.error('Error loading food data:', error);
       throw error;
     }
   }
@@ -27,25 +27,26 @@ class FoodService {
 
   async getFoodsByCategory(category) {
     if (!this.foodData) await this.loadData();
-    return this.foodData.filter((item) => item.category === category);
+    const categoryLower = category.toLowerCase();
+    return this.foodData.filter(item => item.category === categoryLower);
   }
+
 
   async getCategories() {
     if (!this.foodData) await this.loadData();
-    const categories = [...new Set(this.foodData.map((item) => item.category))];
-    return categories.map((category) => ({
+    const categories = [...new Set(this.foodData.map(item => item.category))];
+    return categories.map(category => ({
       name: category,
-      count: this.foodData.filter((item) => item.category === category).length,
+      count: this.foodData.filter(item => item.category === category).length
     }));
   }
 
   async searchFoods(query) {
     if (!this.foodData) await this.loadData();
     const searchTerm = query.toLowerCase();
-    return this.foodData.filter(
-      (item) =>
-        item.food.toLowerCase().includes(searchTerm) ||
-        item.category.toLowerCase().includes(searchTerm)
+    return this.foodData.filter(item => 
+      item.food.toLowerCase().includes(searchTerm) || 
+      item.category.toLowerCase().includes(searchTerm)
     );
   }
 }

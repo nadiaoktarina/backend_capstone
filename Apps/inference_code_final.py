@@ -49,4 +49,4 @@ def predict_image(image_path):
     print(f"Prediksi: {predicted_class.replace('_', ' ').title()} (Confidence: {confidence:.2f})")
 
 if __name__ == "__main__":
-    predict_image('eskrim.jpeg')  # Ganti dengan path gambar yang diinginkan
+    predict_image('')  # Ganti dengan path gambar yang diinginkan

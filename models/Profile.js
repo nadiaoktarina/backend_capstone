@@ -16,7 +16,7 @@ const Profile = {
 
   async create(data) {
     try {
-      const { user_id, nama, tinggi, berat, usia, ibm, target, foto_profil } =
+      const { user_id, nama, tinggi, berat, usia, bmi, target, foto_profil } =
         data;
 
       // Validasi data required
@@ -26,9 +26,9 @@ const Profile = {
 
       const [result] = await db.query(
         `INSERT INTO profiles 
-         (user_id, nama, tinggi, berat, usia, ibm, target, foto_profil, created_at, updated_at) 
+         (user_id, nama, tinggi, berat, usia, bmi, target, foto_profil, created_at, updated_at) 
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
-        [user_id, nama, tinggi, berat, usia, ibm, target, foto_profil]
+        [user_id, nama, tinggi, berat, usia, bmi, target, foto_profil]
       );
 
       return result.insertId;
@@ -40,7 +40,7 @@ const Profile = {
 
   async updateByUserId(userId, data) {
     try {
-      const { nama, tinggi, berat, usia, ibm, target, foto_profil } = data;
+      const { nama, tinggi, berat, usia, bmi, target, foto_profil } = data;
 
       if (!nama || !tinggi || !berat || !usia) {
         throw new Error("Data required tidak lengkap");
@@ -48,9 +48,9 @@ const Profile = {
 
       const [result] = await db.query(
         `UPDATE profiles 
-       SET nama=?, tinggi=?, berat=?, usia=?, ibm=?, target=?, foto_profil=?, updated_at=NOW() 
+       SET nama=?, tinggi=?, berat=?, usia=?, bmi=?, target=?, foto_profil=?, updated_at=NOW() 
        WHERE user_id=?`,
-        [nama, tinggi, berat, usia, ibm, target, foto_profil, userId]
+        [nama, tinggi, berat, usia, bmi, target, foto_profil, userId]
       );
 
       return result.affectedRows > 0;

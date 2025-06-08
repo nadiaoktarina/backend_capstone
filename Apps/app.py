@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 import tensorflow as tf
 import numpy as np
 import os
@@ -6,6 +7,7 @@ import json
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+CORS(app, resources={r"/predict": {"origins": "http://localhost:3000"}})
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 
 # Load Model
@@ -54,32 +56,36 @@ def get_nutrition_data(food_snake_case):
 
     return None
 
-# Halaman utama
-@app.route('/', methods=['GET'])
-def index():
-    return render_template('index.html')
-
 # Endpoint prediksi
 @app.route('/predict', methods=['POST'])
 def upload_image():
-    if 'image' not in request.files:
-        return 'No file uploaded!', 400
-    file = request.files['image']
-    filename = secure_filename(file.filename)
-    filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file.save(filepath)
+    try:
+        if 'image' not in request.files:
+            print("No image in request")
+            return jsonify({'error': 'No file uploaded!'}), 400
 
-    label_snake, confidence = predict_image(filepath)
-    label_title = label_snake.replace('_', ' ').title()
-    nutrition_info = get_nutrition_data(label_snake)
+        file = request.files['image']
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
 
-    return render_template(
-        'index.html',
-        label=label_title,
-        confidence=confidence,
-        image_path=filepath,
-        nutrition=nutrition_info
-    )
+        print("File saved to:", filepath)
+
+        label_snake, confidence = predict_image(filepath)
+        print("Prediction complete")
+
+        label_title = label_snake.replace('_', ' ').title()
+        nutrition_info = get_nutrition_data(label_snake)
+
+        return jsonify({
+            'label': label_title,
+            'confidence': confidence,
+            'image_path': filepath,
+            'nutrition': nutrition_info
+        })
+    except Exception as e:
+        print("ERROR:", e)
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8000)

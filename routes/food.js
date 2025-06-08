@@ -25,6 +25,20 @@ module.exports = [
     },
   },
   {
+    method: 'GET',
+    path: '/foodphoto/{param*}',
+    options: {
+      auth: false,
+    },
+    handler: {
+      directory: {
+        path: '.',
+        listing: false,
+        index: false,
+      }
+    }
+  },
+  {
     method: "GET",
     path: "/foods/categories",
     handler: async (request, h) => {
@@ -50,6 +64,7 @@ module.exports = [
     method: "GET",
     path: "/foods/category/{category}",
     options: {
+      auth: false,
       validate: {
         params: Joi.object({
           category: Joi.string()
@@ -81,9 +96,10 @@ module.exports = [
     method: "GET",
     path: "/foods/search",
     options: {
+      auth: 'default',
       validate: {
         query: Joi.object({
-          q: Joi.string().min(2).required(),
+          q: Joi.string().required(),
         }),
       },
     },

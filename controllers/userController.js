@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Profile = require("../models/Profile");
 const { hashPassword, comparePassword } = require("../utils/hash");
 const { successResponse, errorResponse } = require("../utils/response");
 const crypto = require("crypto");
@@ -15,6 +16,7 @@ class UserController {
       const userId = request.auth.credentials.userId;
       console.log("🔍 Getting user with ID:", userId);
 
+      // Cari user dari tabel users
       const user = await User.findById(userId);
 
       if (!user) {
@@ -22,12 +24,19 @@ class UserController {
         return h.response(errorResponse("User tidak ditemukan", 404)).code(404);
       }
 
+      // Cari data profil dari tabel profiles
+      const profiles = await Profile.findByUserId(userId);
+
       const userData = {
         id: user.user_id,
         email: user.email,
         created_at: user.created_at,
         updated_at: user.updated_at,
         last_login: user.last_login,
+        nama: profiles?.nama || null,
+        usia: profiles?.usia || null,
+        berat: profiles?.berat || null,
+        tinggi: profiles?.tinggi || null,
       };
 
       return h
