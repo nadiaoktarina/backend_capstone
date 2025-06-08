@@ -10,23 +10,28 @@ module.exports = [
     options: {
       pre: [{ method: authMiddleware }],
       validate: {
-        // payload: Joi.object({
-        //   nama: Joi.string().required(),
-        //   tinggi: Joi.number().min(100).max(250).required(),
-        //   berat: Joi.number().min(30).max(300).required(),
-        //   usia: Joi.number().min(10).max(100).required(),
-        //   target: Joi.string()
-        //     .valid("diet", "bulking", "maintenance")
-        //     .required(),
         payload: Joi.object({
           nama: Joi.string().required(),
           tinggi: Joi.number().min(100).max(250).required(),
           berat: Joi.number().min(30).max(300).required(),
           usia: Joi.number().min(10).max(100).required(),
-          target: Joi.string()
-            .valid("diet", "bulking", "maintenance")
-            .required(),
-          user_id: Joi.number().optional(), // ini tambahan
+          // target: Joi.string()
+          //   .valid("diet", "bulking", "maintenance")
+          //   .required(),
+          foto_profil: Joi.string()
+            .pattern(/^data:image\/(png|jpeg|jpg);base64,/, {
+              name: "data URI",
+            })
+            .optional(),
+          // payload: Joi.object({
+          //   nama: Joi.string().required(),
+          //   tinggi: Joi.number().min(100).max(250).required(),
+          //   berat: Joi.number().min(30).max(300).required(),
+          //   usia: Joi.number().min(10).max(100).required(),
+          //   target: Joi.string()
+          //     .valid("diet", "bulking", "maintenance")
+          //     .required(),
+          //   user_id: Joi.number().optional(), // ini tambahan
         }),
       },
     },
@@ -51,9 +56,14 @@ module.exports = [
           tinggi: Joi.number().min(100).max(250).required(),
           berat: Joi.number().min(30).max(300).required(),
           usia: Joi.number().min(10).max(100).required(),
-          target: Joi.string()
-            .valid("diet", "bulking", "maintenance")
-            .required(),
+          // target: Joi.string()
+          //   .valid("diet", "bulking", "maintenance")
+          //   .required(),
+          foto_profil: Joi.string()
+            .pattern(/^data:image\/(png|jpeg|jpg);base64,/, {
+              name: "data URI",
+            })
+            .optional(),
         }),
       },
     },

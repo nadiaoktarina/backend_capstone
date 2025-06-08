@@ -1,34 +1,89 @@
 const db = require("../config/database");
 
-class Profile {
-  static async create(profileData) {
-    const { user_id, nama, tinggi, berat, usia, ibm, target } = profileData;
-    const [result] = await db.execute(
-      "INSERT INTO profiles (user_id, nama, tinggi, berat, usia, ibm, target, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())",
-      [user_id, nama, tinggi, berat, usia, ibm, target]
-    );
-    return result.insertId;
-  }
+const Profile = {
+  async findByUserId(userId) {
+    try {
+      const [rows] = await db.query(
+        "SELECT * FROM profiles WHERE user_id = ?",
+        [userId]
+      );
+      return rows[0] || null;
+    } catch (error) {
+      console.error("Error finding profile by user ID:", error);
+      throw error;
+    }
+  },
 
-  static async findByUserId(userId) {
-    const [rows] = await db.execute(
-      "SELECT * FROM profiles WHERE user_id = ?",
-      [userId]
-    );
-    return rows[0];
-  }
+  async create(data) {
+    try {
+      const { user_id, nama, tinggi, berat, usia, ibm, target, foto_profil } =
+        data;
 
-  static async update(user_id, profileData) {
-    const { nama, tinggi, berat, usia, ibm, target } = profileData;
-    await db.execute(
-      "UPDATE profiles SET nama = ?, tinggi = ?, berat = ?, usia = ?, ibm = ?, target = ?, updated_at = NOW() WHERE user_id = ?",
-      [nama, tinggi, berat, usia, ibm, target, user_id]
-    );
-  }
+      // Validasi data required
+      if (!user_id || !nama || !tinggi || !berat || !usia) {
+        throw new Error("Data required tidak lengkap");
+      }
 
-  static async delete(user_id) {
-    await db.execute("DELETE FROM profiles WHERE id = ?", [user_id]);
-  }
-}
+      const [result] = await db.query(
+        `INSERT INTO profiles 
+         (user_id, nama, tinggi, berat, usia, ibm, target, foto_profil, created_at, updated_at) 
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
+        [user_id, nama, tinggi, berat, usia, ibm, target, foto_profil]
+      );
+
+      return result.insertId;
+    } catch (error) {
+      console.error("Error creating profile:", error);
+      throw error;
+    }
+  },
+
+  async updateByUserId(userId, data) {
+    try {
+      const { nama, tinggi, berat, usia, ibm, target, foto_profil } = data;
+
+      if (!nama || !tinggi || !berat || !usia) {
+        throw new Error("Data required tidak lengkap");
+      }
+
+      const [result] = await db.query(
+        `UPDATE profiles 
+       SET nama=?, tinggi=?, berat=?, usia=?, ibm=?, target=?, foto_profil=?, updated_at=NOW() 
+       WHERE user_id=?`,
+        [nama, tinggi, berat, usia, ibm, target, foto_profil, userId]
+      );
+
+      return result.affectedRows > 0;
+    } catch (error) {
+      console.error("Error updating profile by user ID:", error);
+      throw error;
+    }
+  },
+
+  async delete(id) {
+    try {
+      const [result] = await db.query("DELETE FROM profiles WHERE id = ?", [
+        id,
+      ]);
+
+      return result.affectedRows > 0;
+    } catch (error) {
+      console.error("Error deleting profile:", error);
+      throw error;
+    }
+  },
+
+  async findById(id) {
+    try {
+      const [rows] = await db.query("SELECT * FROM profiles WHERE id = ?", [
+        id,
+      ]);
+      return rows[0] || null;
+    } catch (error) {
+      console.error("Error finding profile by ID:", error);
+      throw error;
+    }
+  },
+};
 
 module.exports = Profile;

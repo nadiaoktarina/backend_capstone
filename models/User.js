@@ -1,3 +1,4 @@
+// models/User.js - UPDATED VERSION
 const db = require("../config/database");
 
 class User {
@@ -17,10 +18,26 @@ class User {
     return rows[0];
   }
 
-  static async findById(id) {
+  static async findById(user_id) {
     const [rows] = await db.execute("SELECT * FROM users WHERE user_id = ?", [
       user_id,
     ]);
+    return rows[0];
+  }
+
+  static async findByToken(token) {
+    const [rows] = await db.execute("SELECT * FROM users WHERE token = ?", [
+      token,
+    ]);
+    return rows[0];
+  }
+
+  // NEW: Find user by reset token
+  static async findByResetToken(resetToken) {
+    const [rows] = await db.execute(
+      "SELECT * FROM users WHERE reset_token = ?",
+      [resetToken]
+    );
     return rows[0];
   }
 
@@ -28,6 +45,22 @@ class User {
     await db.execute(
       "UPDATE users SET token = ?, updated_at = NOW() WHERE user_id = ?",
       [token, user_id]
+    );
+  }
+
+  // NEW: Update reset token with expiry
+  static async updateResetToken(user_id, resetToken, expiryTime) {
+    await db.execute(
+      "UPDATE users SET reset_token = ?, reset_token_expires = ?, updated_at = NOW() WHERE user_id = ?",
+      [resetToken, expiryTime, user_id]
+    );
+  }
+
+  // NEW: Clear reset token
+  static async clearResetToken(user_id) {
+    await db.execute(
+      "UPDATE users SET reset_token = NULL, reset_token_expires = NULL, updated_at = NOW() WHERE user_id = ?",
+      [user_id]
     );
   }
 
@@ -60,7 +93,7 @@ class User {
 
   static async getAllUsers() {
     const [rows] = await db.execute(
-      "SELECT user_id, email, created_at, updated_at FROM users ORDER BY created_at DESC"
+      "SELECT user_id, email, created_at, updated_at, last_login FROM users ORDER BY created_at DESC"
     );
     return rows;
   }

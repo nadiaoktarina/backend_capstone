@@ -87,12 +87,8 @@ class AuthController {
 
   static async googleAuth(request, h) {
     try {
-      console.log("DEBUG: Masuk googleAuth");
-
       if (!request.auth.isAuthenticated) {
-        return h
-          .response(errorResponse("Google authentication gagal"))
-          .code(401);
+        return h.response("Google authentication gagal").code(401);
       }
 
       const profile = request.auth.credentials.profile;
@@ -100,53 +96,47 @@ class AuthController {
       const email = profile.email;
 
       if (!googleId || !email) {
-        return h
-          .response(errorResponse("Profil Google tidak lengkap"))
-          .code(400);
+        return h.response("Profil Google tidak lengkap").code(400);
       }
 
       let user = await User.findByGoogleId(googleId);
-
-      const token = generateToken({ email });
-
-      console.log("Google Auth Data:", { googleId, email, token, user });
-
-      if (!token) {
-        throw new Error("Token tidak boleh kosong");
-      }
+      let isNewUser = false;
+      let userId;
 
       if (!user) {
-        const userId = await User.createFromGoogle({ googleId, email, token });
-        return h
-          .response(
-            successResponse(
-              { userId, email, token, isNewUser: true },
-              "Login Google berhasil"
-            )
-          )
-          .code(201);
-      } else {
-        if (!user.user_id) {
-          throw new Error("User ID tidak ditemukan");
+        const existingUser = await User.findByEmail(email);
+
+        if (existingUser) {
+          await User.updateGoogleId(existingUser.user_id, googleId);
+          user = existingUser;
+        } else {
+          userId = await User.createFromGoogle({ googleId, email });
+          isNewUser = true;
+
+          // Buat token setelah user dibuat
+          const token = generateToken({ userId, email });
+          await User.updateToken(userId, token);
+
+          return h.redirect(
+            `http://localhost:3000/google-success?token=${token}&email=${encodeURIComponent(
+              email
+            )}&userId=${userId}&isNewUser=true`
+          );
         }
-        await User.updateToken(user.user_id, token);
-        return h
-          .response(
-            successResponse(
-              {
-                userId: user.user_id,
-                email: user.email,
-                token,
-                isNewUser: false,
-              },
-              "Login Google berhasil"
-            )
-          )
-          .code(200);
       }
+
+      // user sudah ada (baru atau lama), generate token baru
+      const token = generateToken({ userId: user.user_id, email });
+      await User.updateToken(user.user_id, token);
+
+      return h.redirect(
+        `http://localhost:3000/google-success?token=${token}&email=${encodeURIComponent(
+          email
+        )}&userId=${user.user_id}&isNewUser=${isNewUser}`
+      );
     } catch (error) {
       console.error("Google Auth Error:", error);
-      return h.response(errorResponse("Terjadi kesalahan di server")).code(500);
+      return h.response("Terjadi kesalahan di server").code(500);
     }
   }
 }

@@ -12,19 +12,32 @@ module.exports = [
     },
   },
   {
-    method: "PUT",
-    path: "/user/password",
-    handler: UserController.changePassword,
+    method: "POST",
+    path: "/user/forgot-password",
+    handler: UserController.forgotPassword,
     options: {
-      pre: [{ method: authMiddleware }],
+      auth: false,
       validate: {
         payload: Joi.object({
-          oldPassword: Joi.string().required(),
+          email: Joi.string().email().required(),
+        }),
+      },
+    },
+  },
+  {
+    method: "POST",
+    path: "/user/reset-password",
+    handler: UserController.resetPassword,
+    options: {
+      validate: {
+        payload: Joi.object({
+          token: Joi.string().required(),
           newPassword: Joi.string().min(6).required(),
         }),
       },
     },
   },
+
   {
     method: "DELETE",
     path: "/user/account",

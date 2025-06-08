@@ -7,6 +7,7 @@ module.exports = [
     path: "/auth/register",
     handler: AuthController.register,
     options: {
+      auth: false, // ⬅️ Tambahkan ini
       validate: {
         payload: Joi.object({
           email: Joi.string().email().required(),
@@ -20,6 +21,7 @@ module.exports = [
     path: "/auth/login",
     handler: AuthController.login,
     options: {
+      auth: false, // ⬅️ Tambahkan ini juga
       validate: {
         payload: Joi.object({
           email: Joi.string().email().required(),
@@ -33,7 +35,7 @@ module.exports = [
     path: "/auth/google",
     handler: AuthController.googleAuth,
     options: {
-      auth: "google",
+      auth: "google", // OAuth pakai strategi 'google'
     },
   },
 ];

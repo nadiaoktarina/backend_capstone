@@ -1,26 +1,38 @@
 const { verifyToken } = require("../utils/jwt");
 const { errorResponse } = require("../utils/response");
 
-const authMiddleware = async (request, h) => {
-  try {
-    const authorization = request.headers.authorization;
+const authScheme = () => {
+  return {
+    authenticate: async (request, h) => {
+      try {
+        const authHeader = request.headers.authorization;
 
-    if (!authorization) {
-      return h.response(errorResponse("Token tidak ditemukan", 401)).code(401);
-    }
+        if (!authHeader) {
+          throw new Error("Token tidak ditemukan");
+        }
 
-    const token = authorization.replace("Bearer ", "");
-    const decoded = verifyToken(token);
+        if (!authHeader.startsWith("Bearer ")) {
+          throw new Error("Format token tidak valid");
+        }
 
-    request.auth = {
-      userId: decoded.userId,
-      email: decoded.email,
-    };
+        const token = authHeader.substring(7);
+        if (!token) {
+          throw new Error("Token kosong");
+        }
 
-    return h.continue;
-  } catch (error) {
-    return h.response(errorResponse("Token tidak valid", 401)).code(401);
-  }
+        const decoded = verifyToken(token);
+
+        return h.authenticated({ credentials: decoded });
+      } catch (err) {
+        console.error("Auth scheme error:", err.message);
+
+        return h
+          .response(errorResponse(err.message || "Unauthorized", 401))
+          .code(401)
+          .takeover();
+      }
+    },
+  };
 };
 
-module.exports = authMiddleware;
+module.exports = authScheme;

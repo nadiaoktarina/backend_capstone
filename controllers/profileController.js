@@ -1,176 +1,180 @@
+// controllers/profileController.js
 const Profile = require("../models/Profile");
 const { successResponse, errorResponse } = require("../utils/response");
-const axios = require("axios");
 
 class ProfileController {
-  // static async createProfile(request, h) {
-  //   try {
-  //     const { nama, tinggi, berat, usia, target } = request.payload;
-  //     const userId = request.auth.userId;
-
   static async createProfile(request, h) {
     try {
-      const { nama, tinggi, berat, usia, target, user_id } = request.payload;
-      const userId = request.auth?.userId || user_id;
+      console.log("CREATE PROFILE - Auth:", request.auth);
+
+      // Ambil userId dari token yang sudah di-decode
+      const userId = request.auth.credentials.userId;
 
       if (!userId) {
-        return h
-          .response(errorResponse("User ID tidak tersedia", 400))
-          .code(400);
+        console.error("User ID tidak ditemukan dalam token");
+        return h.response(errorResponse("User ID tidak valid", 400)).code(400);
       }
-      // Calculate IBM (BMI)
-      const tinggiMeter = tinggi / 100;
-      const ibm = (berat / (tinggiMeter * tinggiMeter)).toFixed(1);
 
-      // Check if profile already exists
+      const { nama, tinggi, berat, usia, foto_profil } = request.payload;
+
+      // Cek apakah profil sudah ada
       const existingProfile = await Profile.findByUserId(userId);
       if (existingProfile) {
         return h
-          .response(
-            errorResponse("Profile sudah ada, gunakan endpoint update", 400)
-          )
+          .response(errorResponse("Profil sudah ada, gunakan update", 400))
           .code(400);
       }
 
-      const profileId = await Profile.create({
+      // Buat profil baru
+      const profileData = {
         user_id: userId,
         nama,
         tinggi,
         berat,
         usia,
-        ibm: parseFloat(ibm),
-        target,
-      });
+        foto_profil: foto_profil || null,
+      };
+
+      const profileId = await Profile.create(profileData);
+      const createdProfile = await Profile.findById(profileId);
+
+      console.log("Profile created successfully:", createdProfile);
 
       return h
-        .response(
-          successResponse(
-            {
-              profileId,
-              nama,
-              tinggi,
-              berat,
-              usia,
-              ibm: parseFloat(ibm),
-              target,
-            },
-            "Profile berhasil dibuat"
-          )
-        )
+        .response(successResponse(createdProfile, "Profil berhasil dibuat"))
         .code(201);
     } catch (error) {
-      return h.response(errorResponse("Internal server error")).code(500);
+      console.error("Create profile error:", error);
+      return h.response(errorResponse("Gagal membuat profil")).code(500);
     }
   }
 
   static async getProfile(request, h) {
     try {
-      const userId = request.auth.userId;
+      console.log("GET PROFILE - Auth:", request.auth);
+
+      // Ambil userId dari token yang sudah di-decode
+      const userId = request.auth.credentials.userId;
+
+      if (!userId) {
+        console.error("User ID tidak ditemukan dalam token");
+        return h.response(errorResponse("User ID tidak valid", 400)).code(400);
+      }
+
+      console.log("Looking for profile with userId:", userId);
+
       const profile = await Profile.findByUserId(userId);
 
       if (!profile) {
+        console.log("Profile tidak ditemukan untuk user:", userId);
         return h
-          .response(errorResponse("Profile tidak ditemukan", 404))
+          .response(errorResponse("Profil tidak ditemukan", 404))
           .code(404);
       }
 
+      console.log("Profile found:", profile);
+
       return h
-        .response(successResponse(profile, "Profile ditemukan"))
+        .response(successResponse(profile, "Profil berhasil diambil"))
         .code(200);
     } catch (error) {
-      return h.response(errorResponse("Internal server error")).code(500);
+      console.error("Get profile error:", error);
+      return h.response(errorResponse("Gagal mengambil profil")).code(500);
     }
   }
 
   static async updateProfile(request, h) {
     try {
-      const { nama, tinggi, berat, usia, target } = request.payload;
-      const userId = request.auth.userId;
+      console.log("UPDATE PROFILE - Auth:", request.auth);
 
-      const profile = await Profile.findByUserId(userId);
-      if (!profile) {
+      // Ambil userId dari token yang sudah di-decode
+      const userId = request.auth.credentials.userId;
+
+      if (!userId) {
+        console.error("User ID tidak ditemukan dalam token");
+        return h.response(errorResponse("User ID tidak valid", 400)).code(400);
+      }
+
+      const { nama, tinggi, berat, usia, foto_profil } = request.payload;
+
+      // Cek apakah profil ada
+      const existingProfile = await Profile.findByUserId(userId);
+      if (!existingProfile) {
         return h
-          .response(errorResponse("Profile tidak ditemukan", 404))
+          .response(errorResponse("Profil tidak ditemukan", 404))
           .code(404);
       }
 
-      // Calculate new IBM
-      const tinggiMeter = tinggi / 100;
-      const ibm = (berat / (tinggiMeter * tinggiMeter)).toFixed(1);
-
-      await Profile.update(profile.id, {
+      // Update profil
+      const updateData = {
         nama,
         tinggi,
         berat,
         usia,
-        ibm: parseFloat(ibm),
-        target,
-      });
+        foto_profil: foto_profil || existingProfile.foto_profil,
+      };
+
+      await Profile.updateByUserId(userId, updateData);
+      const updatedProfile = await Profile.findByUserId(userId);
+
+      console.log("Profile updated successfully:", updatedProfile);
 
       return h
-        .response(
-          successResponse(
-            {
-              nama,
-              tinggi,
-              berat,
-              usia,
-              ibm: parseFloat(ibm),
-              target,
-            },
-            "Profile berhasil diupdate"
-          )
-        )
+        .response(successResponse(updatedProfile, "Profil berhasil diperbarui"))
         .code(200);
     } catch (error) {
-      return h.response(errorResponse("Internal server error")).code(500);
+      console.error("Update profile error:", error);
+      return h.response(errorResponse("Gagal memperbarui profil")).code(500);
     }
   }
 
   static async getRecommendation(request, h) {
     try {
-      const userId = request.auth.userId;
+      console.log("GET RECOMMENDATION - Auth:", request.auth);
+
+      // Ambil userId dari token yang sudah di-decode
+      const userId = request.auth.credentials.userId;
+
+      if (!userId) {
+        console.error("User ID tidak ditemukan dalam token");
+        return h.response(errorResponse("User ID tidak valid", 400)).code(400);
+      }
+
       const profile = await Profile.findByUserId(userId);
 
       if (!profile) {
         return h
-          .response(
-            errorResponse(
-              "Profile tidak ditemukan, silakan lengkapi data diri terlebih dahulu",
-              404
-            )
-          )
+          .response(errorResponse("Profil tidak ditemukan", 404))
           .code(404);
       }
 
-      // Call ML Server
-      const mlResponse = await axios.post(
-        `${process.env.ML_SERVER_URL}/predict`,
-        {
-          tinggi: profile.tinggi,
-          berat: profile.berat,
-          usia: profile.usia,
-          ibm: profile.ibm,
-          target: profile.target,
-        }
-      );
+      // Hitung BMI dan beri rekomendasi
+      const bmi = profile.berat / (profile.tinggi / 100) ** 2;
+
+      let recommendation = "";
+      if (bmi < 18.5) {
+        recommendation = "Underweight - Disarankan untuk menambah berat badan";
+      } else if (bmi < 25) {
+        recommendation = "Normal - Pertahankan pola hidup sehat";
+      } else if (bmi < 30) {
+        recommendation = "Overweight - Disarankan untuk menurunkan berat badan";
+      } else {
+        recommendation =
+          "Obese - Konsultasi dengan dokter untuk program penurunan berat badan";
+      }
+
+      const result = {
+        profile,
+        bmi: parseFloat(bmi.toFixed(2)),
+        recommendation,
+      };
 
       return h
-        .response(
-          successResponse(
-            {
-              profile: profile,
-              recommendation: mlResponse.data,
-            },
-            "Rekomendasi berhasil didapatkan"
-          )
-        )
+        .response(successResponse(result, "Rekomendasi berhasil dibuat"))
         .code(200);
     } catch (error) {
-      if (error.code === "ECONNREFUSED") {
-        return h.response(errorResponse("ML Server tidak tersedia")).code(503);
-      }
-      return h.response(errorResponse("Internal server error")).code(500);
+      console.error("Get recommendation error:", error);
+      return h.response(errorResponse("Gagal membuat rekomendasi")).code(500);
     }
   }
 }

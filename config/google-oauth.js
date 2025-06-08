@@ -10,7 +10,7 @@ const googleOAuthConfig = {
   scope: ["profile", "email"],
   providerParams: {
     redirect_uri:
-      process.env.GOOGLE_REDIRECT_URI || "http://localhost:3000/auth/google",
+      process.env.GOOGLE_REDIRECT_URI || "http://localhost:5000/auth/google",
   },
 };
 
