@@ -1,4 +1,3 @@
-// routes/auth.js - CORRECTED VERSION for AssertError: Invalid route options
 const AuthController = require("../controllers/authController");
 const { validateRegistration, validateLogin } = require("../middleware/validation");
 

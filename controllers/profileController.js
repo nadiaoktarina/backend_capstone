@@ -25,6 +25,20 @@ class ProfileController {
           .code(400);
       }
 
+      // Hitung BMI dan target
+      const tinggiMeter = tinggi / 100;
+      const bmi = berat / (tinggiMeter * tinggiMeter);
+      const roundedBMI = parseFloat(bmi.toFixed(2));
+
+      let target = "";
+      if (bmi < 18.5) {
+        target = "bulking";
+      } else if (bmi < 25) {
+        target = "maintenance";
+      } else {
+        target = "diet";
+      }
+
       // Buat profil baru
       const profileData = {
         user_id: userId,
@@ -32,6 +46,8 @@ class ProfileController {
         tinggi,
         berat,
         usia,
+        bmi: roundedBMI,
+        target,
         foto_profil: foto_profil || null,
       };
 
@@ -105,12 +121,28 @@ class ProfileController {
           .code(404);
       }
 
+      // Hitung BMI dan target
+      const tinggiMeter = tinggi / 100;
+      const bmi = berat / (tinggiMeter * tinggiMeter);
+      const roundedBMI = parseFloat(bmi.toFixed(2));
+
+      let target = "";
+      if (bmi < 18.5) {
+        target = "bulking";
+      } else if (bmi < 25) {
+        target = "maintenance";
+      } else {
+        target = "diet";
+      }
+
       // Update profil
       const updateData = {
         nama,
         tinggi,
         berat,
         usia,
+        bmi: roundedBMI,
+        target,
         foto_profil: foto_profil || existingProfile.foto_profil,
       };
 
@@ -149,24 +181,33 @@ class ProfileController {
       }
 
       // Hitung BMI dan beri rekomendasi
-      const bmi = profile.berat / (profile.tinggi / 100) ** 2;
+      const tinggiMeter = profile.tinggi / 100;
+      const bmi = profile.berat / (tinggiMeter * tinggiMeter);
+      const roundedBMI = parseFloat(bmi.toFixed(2));
 
       let recommendation = "";
+      let target = "";
+
       if (bmi < 18.5) {
         recommendation = "Underweight - Disarankan untuk menambah berat badan";
+        target = "bulking";
       } else if (bmi < 25) {
         recommendation = "Normal - Pertahankan pola hidup sehat";
+        target = "maintenance";
       } else if (bmi < 30) {
         recommendation = "Overweight - Disarankan untuk menurunkan berat badan";
+        target = "diet";
       } else {
         recommendation =
           "Obese - Konsultasi dengan dokter untuk program penurunan berat badan";
+        target = "diet";
       }
 
       const result = {
         profile,
-        bmi: parseFloat(bmi.toFixed(2)),
+        bmi: roundedBMI,
         recommendation,
+        target,
       };
 
       return h
