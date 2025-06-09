@@ -1,4 +1,4 @@
-// server.js - UPDATED GOOGLE OAUTH CONFIG
+// server.js - UPDATED FOR DEPLOYMENT
 const Hapi = require("@hapi/hapi");
 const Bell = require("@hapi/bell");
 const Cookie = require("@hapi/cookie");
@@ -10,15 +10,15 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const profileRoutes = require("./routes/profile");
 
-const googleOAuthConfig = require("./config/google-oauth"); // Import konfigurasi Google OAuth
+const googleOAuthConfig = require("./config/google-oauth"); // Optional, if you handle config separately
 
 const init = async () => {
   const server = Hapi.server({
     port: process.env.PORT || 5000,
-    host: "localhost",
+    host: "0.0.0.0", // ✅ WAJIB untuk deployment (Render, Railway, dll)
     routes: {
       cors: {
-        origin: ["http://localhost:3000"], // Pastikan ini cocok dengan frontend Anda
+        origin: ["http://localhost:3000"], // Ganti jika frontend sudah live
         credentials: true,
         headers: ["Accept", "Authorization", "Content-Type", "If-None-Match"],
         additionalHeaders: ["cache-control", "x-requested-with"],
@@ -32,24 +32,22 @@ const init = async () => {
   // Configure Google OAuth
   server.auth.strategy("google", "bell", {
     provider: "google",
-    password: process.env.BELL_PASSWORD || "a_very_long_random_string_for_encryption_in_production", // Gunakan env var yang aman
+    password: process.env.BELL_PASSWORD || "a_very_long_random_string_for_encryption_in_production",
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    isSecure: process.env.NODE_ENV === 'production', // true di production (pakai HTTPS), false untuk lokal
+    isSecure: process.env.NODE_ENV === "production", // true jika HTTPS
     scope: ["profile", "email"],
     config: {
       authParams: {
-        prompt: "select_account", // Memaksa pengguna memilih akun setiap kali
+        prompt: "select_account", // Paksa pilih akun Google setiap kali
       },
-      // Hapi Bell akan menangani redirect_uri secara otomatis berdasarkan providerParams
-      // yang kita definisikan di google-oauth.js
     },
   });
 
   // Register custom auth scheme & strategy (JWT)
   server.auth.scheme("custom", authScheme);
   server.auth.strategy("default", "custom");
-  server.auth.default("default"); // Semua route butuh JWT, kecuali didefinisikan `auth: false`
+  server.auth.default("default");
 
   // Register routes
   server.route(authRoutes);
@@ -57,11 +55,12 @@ const init = async () => {
   server.route(profileRoutes);
 
   await server.start();
-  console.log(`Server running on ${server.info.uri}`);
+  console.log(`✅ Server running on ${server.info.uri}`);
 };
 
+// Global error handling
 process.on("unhandledRejection", (err) => {
-  console.log(err);
+  console.error("❌ Unhandled Rejection:", err);
   process.exit(1);
 });
 
