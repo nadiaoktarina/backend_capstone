@@ -24,6 +24,12 @@ module.exports = {
         unique: true,
         allowNull: true,
       },
+      // === TAMBAHKAN KOLOM 'name' DI SINI ===
+      name: {
+        type: Sequelize.STRING(255),
+        allowNull: true, // Nama bisa null jika pengguna tidak login via Google
+      },
+      // =====================================
       token: {
         type: Sequelize.TEXT,
         allowNull: true,

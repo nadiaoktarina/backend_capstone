@@ -59,8 +59,15 @@ class UserController {
       const resetToken = generateRandomToken();
       const expiryTime = new Date(Date.now() + 60 * 60 * 1000); // 1 jam dari sekarang
 
-      await User.updateResetToken(user.user_id, resetToken, expiryTime);
+      // PERBAIKAN DI SINI: Mengubah updateResetToken menjadi storeResetToken
+      await User.storeResetToken(user.user_id, resetToken, expiryTime);
 
+      // Pastikan sendResetEmail menerima link lengkap jika Anda ingin di frontend
+      // Jika sendResetEmail hanya menerima token, dan link dibuat di util:
+      // const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`;
+      // await sendResetEmail(email, resetLink);
+      // Tapi jika sendResetEmail Anda hanya butuh token dan membentuk link sendiri, kode Anda sudah benar.
+      // Berdasarkan utils/email.js yang Anda berikan, parameter kedua adalah 'token'
       await sendResetEmail(email, resetToken); // Kirim email menggunakan Nodemailer
 
       return h

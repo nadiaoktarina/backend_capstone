@@ -1,4 +1,4 @@
-// models/User.js - UPDATED VERSION
+// models/User.js - UPDATED VERSION for Google
 const db = require("../config/database");
 
 class User {
@@ -32,6 +32,13 @@ class User {
     return rows[0];
   }
 
+  static async updateToken(user_id, token) {
+    await db.execute(
+      "UPDATE users SET token = ?, updated_at = NOW() WHERE user_id = ?",
+      [token, user_id]
+    );
+  }
+
   // NEW: Find user by reset token
   static async findByResetToken(resetToken) {
     const [rows] = await db.execute(
@@ -41,15 +48,8 @@ class User {
     return rows[0];
   }
 
-  static async updateToken(user_id, token) {
-    await db.execute(
-      "UPDATE users SET token = ?, updated_at = NOW() WHERE user_id = ?",
-      [token, user_id]
-    );
-  }
-
-  // NEW: Update reset token with expiry
-  static async updateResetToken(user_id, resetToken, expiryTime) {
+  // NEW: Store reset token
+  static async storeResetToken(user_id, resetToken, expiryTime) {
     await db.execute(
       "UPDATE users SET reset_token = ?, reset_token_expires = ?, updated_at = NOW() WHERE user_id = ?",
       [resetToken, expiryTime, user_id]
@@ -75,6 +75,7 @@ class User {
     await db.execute("DELETE FROM users WHERE user_id = ?", [user_id]);
   }
 
+  // NEW: Find user by Google ID
   static async findByGoogleId(googleId) {
     const [rows] = await db.execute("SELECT * FROM users WHERE google_id = ?", [
       googleId,
@@ -82,27 +83,35 @@ class User {
     return rows[0];
   }
 
+  // NEW: Create user from Google data
   static async createFromGoogle(googleData) {
-    const { googleId, email, token } = googleData;
+    const { googleId, email, name } = googleData;
     const [result] = await db.execute(
-      "INSERT INTO users (google_id, email, token, created_at) VALUES (?, ?, ?, NOW())",
-      [googleId, email, token]
+      "INSERT INTO users (google_id, email, name, created_at) VALUES (?, ?, ?, NOW())",
+      [googleId, email, name]
     );
     return result.insertId;
   }
 
-  static async getAllUsers() {
-    const [rows] = await db.execute(
-      "SELECT user_id, email, created_at, updated_at, last_login FROM users ORDER BY created_at DESC"
+  // NEW: Update existing user with Google ID
+  static async updateGoogleId(user_id, googleId) {
+    await db.execute(
+      "UPDATE users SET google_id = ?, updated_at = NOW() WHERE user_id = ?",
+      [googleId, user_id]
     );
-    return rows;
   }
 
+  // NEW: Update last_login
   static async updateLastLogin(user_id) {
     await db.execute(
-      "UPDATE users SET last_login = NOW(), updated_at = NOW() WHERE user_id = ?",
+      "UPDATE users SET last_login = NOW() WHERE user_id = ?",
       [user_id]
     );
+  }
+
+  static async getAllUsers() {
+    const [rows] = await db.execute("SELECT * FROM users");
+    return rows;
   }
 }
 
