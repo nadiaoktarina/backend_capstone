@@ -11,29 +11,24 @@ module.exports = [
       pre: [{ method: authMiddleware }],
       validate: {
         payload: Joi.object({
-          nama: Joi.string().required(),
+          nama: Joi.string().min(2).max(100).required(),
           tinggi: Joi.number().min(100).max(250).required(),
           berat: Joi.number().min(30).max(300).required(),
           usia: Joi.number().min(10).max(100).required(),
-          // target: Joi.string()
-          //   .valid("diet", "bulking", "maintenance")
-          //   .required(),
+          target: Joi.string().valid("Diet", "Bulking", "Maintenance").optional(), // Pastikan case sensitif sesuai ENUM di DB
           foto_profil: Joi.string()
             .pattern(/^data:image\/(png|jpeg|jpg);base64,/, {
               name: "data URI",
             })
             .optional(),
-          // payload: Joi.object({
-          //   nama: Joi.string().required(),
-          //   tinggi: Joi.number().min(100).max(250).required(),
-          //   berat: Joi.number().min(30).max(300).required(),
-          //   usia: Joi.number().min(10).max(100).required(),
-          //   target: Joi.string()
-          //     .valid("diet", "bulking", "maintenance")
-          //     .required(),
-          //   user_id: Joi.number().optional(), // ini tambahan
         }),
       },
+      payload: { // Ditambahkan untuk batas ukuran payload
+        maxBytes: 10 * 1024 * 1024, // Contoh: 10 MB (sesuaikan sesuai kebutuhan Anda)
+        output: 'data',
+        parse: true,
+        allow: 'application/json'
+      }
     },
   },
   {
@@ -52,13 +47,11 @@ module.exports = [
       pre: [{ method: authMiddleware }],
       validate: {
         payload: Joi.object({
-          nama: Joi.string().required(),
-          tinggi: Joi.number().min(100).max(250).required(),
-          berat: Joi.number().min(30).max(300).required(),
-          usia: Joi.number().min(10).max(100).required(),
-          // target: Joi.string()
-          //   .valid("diet", "bulking", "maintenance")
-          //   .required(),
+          nama: Joi.string().min(2).max(100).optional(), // Optional karena ini update
+          tinggi: Joi.number().min(100).max(250).optional(),
+          berat: Joi.number().min(30).max(300).optional(),
+          usia: Joi.number().min(10).max(100).optional(),
+          target: Joi.string().valid("Diet", "Bulking", "Maintenance").optional(),
           foto_profil: Joi.string()
             .pattern(/^data:image\/(png|jpeg|jpg);base64,/, {
               name: "data URI",
@@ -66,6 +59,12 @@ module.exports = [
             .optional(),
         }),
       },
+      payload: { // Ditambahkan untuk batas ukuran payload
+        maxBytes: 10 * 1024 * 1024, // Contoh: 10 MB
+        output: 'data',
+        parse: true,
+        allow: 'application/json'
+      }
     },
   },
   {

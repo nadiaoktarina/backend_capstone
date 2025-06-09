@@ -22,7 +22,7 @@ module.exports = {
       },
       foto_profil: {
         allowNull: false,
-        type: Sequelize.MEDIUMTEXT,
+        type: Sequelize.TEXT('medium'),
       },
       nama: {
         type: Sequelize.STRING(255),
