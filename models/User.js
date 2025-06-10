@@ -5,7 +5,7 @@ class User {
   static async create(userData) {
     const { email, password, token } = userData;
     const [result] = await db.execute(
-      "INSERT INTO users (email, password, token, created_at) VALUES (?, ?, ?, NOW())",
+      "INSERT INTO users (email, password, token, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())",
       [email, password, token]
     );
     return result.insertId;
