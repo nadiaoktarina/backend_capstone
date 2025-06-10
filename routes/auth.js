@@ -41,7 +41,7 @@ module.exports = [
           // Untuk error, Bell akan sering memberikan detail di request.auth.error.
           console.error("Google login failed or not authenticated:", request.auth.error);
           // Redirect ke halaman login frontend dengan pesan error.
-          return h.redirect(`http://localhost:3000/login?error=${encodeURIComponent(request.auth.error ? request.auth.error.message : 'Login Google dibatalkan atau gagal')}`);
+          return h.redirect(`https://nadiaoktarina.github.io/project_capstone/login?error=${encodeURIComponent(request.auth.error ? request.auth.error.message : 'Login Google dibatalkan atau gagal')}`);
         }
       },
     },
