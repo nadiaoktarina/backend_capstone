@@ -85,10 +85,10 @@ class User {
 
   // NEW: Create user from Google data
   static async createFromGoogle(googleData) {
-    const { googleId, email, name } = googleData;
+    const { googleId, email } = googleData;
     const [result] = await db.execute(
-      "INSERT INTO users (google_id, email, name, created_at) VALUES (?, ?, ?, NOW())",
-      [googleId, email, name]
+      "INSERT INTO users (google_id, email, created_at, updated_at) VALUES (?, ?, NOW(), NOW())",
+      [googleId, email]
     );
     return result.insertId;
   }

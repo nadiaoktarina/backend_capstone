@@ -1,5 +1,5 @@
-config:
-
+const fs = require("fs");
+const path = require("path");
 require("dotenv").config();
 
 module.exports = {
@@ -27,5 +27,10 @@ module.exports = {
     dialect: "mysql",
     port: process.env.DB_PORT_PROD || 3306,
     logging: false,
+    dialectOptions: {
+      ssl: {
+        ca: fs.readFileSync(path.join(__dirname, "certs", "ca.pem")),
+      },
+    },
   },
 };

@@ -125,6 +125,7 @@ class AuthController {
           console.log(`User existing with email ${email} linked to Google ID.`);
         } else {
           userId = await User.createFromGoogle({ googleId, email, name });
+          user = await User.findById(userId);
           isNewUser = true;
           console.log(`New user created from Google with ID: ${userId}`);
         }
