@@ -88,7 +88,7 @@ class AuthController {
     static async googleLogin(request, h) {
        if (!request.auth.isAuthenticated) {
       console.error("Google login initiation error:", request.auth.error);
-      return h.redirect(`https://nadiaoktarina.github.io/project_capstone/login?error=${encodeURIComponent('Gagal memulai login Google')}`);
+      return h.redirect(`https://nadiaoktarina.github.io/project_capstone/#/login?error=${encodeURIComponent('Gagal memulai login Google')}`);
     }
         return `Redirecting to Google...`;
   }
@@ -98,7 +98,7 @@ class AuthController {
     try {
       if (!request.auth.isAuthenticated) {
         console.error("Google Auth: Not authenticated");
-        return h.redirect(`https://nadiaoktarina.github.io/project_capstone/login?error=${encodeURIComponent('Autentikasi Google gagal')}`);
+        return h.redirect(`https://nadiaoktarina.github.io/project_capstone/#/login?error=${encodeURIComponent('Autentikasi Google gagal')}`);
       }
 
       const { profile } = request.auth.credentials;
@@ -108,7 +108,7 @@ class AuthController {
 
       if (!googleId || !email) {
         console.error("Google Auth Error: Profil Google tidak lengkap", profile);
-        return h.redirect(`https://nadiaoktarina.github.io/project_capstone/login?error=${encodeURIComponent('Profil Google tidak lengkap (ID atau email tidak ditemukan)')}`);
+        return h.redirect(`https://nadiaoktarina.github.io/project_capstone/#/login?error=${encodeURIComponent('Profil Google tidak lengkap (ID atau email tidak ditemukan)')}`);
       }
 
       let user = await User.findByGoogleId(googleId);
