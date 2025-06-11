@@ -11,7 +11,7 @@ async function sendResetEmail(toEmail, token) {
     },
   });
 
-  const resetLink = `http://localhost:3000/reset-password?token=${token}`;
+  const resetLink = `https://nadiaoktarina.github.io/project_capstone/reset-password?token=${token}`;
 
   const mailOptions = {
     from: `"Admin" <${process.env.EMAIL_USER}>`,

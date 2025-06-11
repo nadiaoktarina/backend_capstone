@@ -140,13 +140,13 @@ class AuthController {
 
       console.log(`Redirecting to frontend with token for user ID: ${userId}`);
       return h.redirect(
-        `https://nadiaoktarina.github.io/project_capstone/google-success?token=${token}&email=${encodeURIComponent(
+        `https://nadiaoktarina.github.io/project_capstone/#/google-success?token=${token}&email=${encodeURIComponent(
           email
         )}&userId=${userId}&isNewUser=${isNewUser}`
       );
     } catch (error) {
       console.error("Google Auth Error:", error);
-      return h.redirect(`https://nadiaoktarina.github.io/project_capstone/login?error=${encodeURIComponent('Terjadi kesalahan saat login Google')}`);
+      return h.redirect(`https://nadiaoktarina.github.io/project_capstone/#/login?error=${encodeURIComponent('Terjadi kesalahan saat login Google')}`);
     }
   }
 }
