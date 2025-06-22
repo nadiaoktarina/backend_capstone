@@ -29,6 +29,7 @@ module.exports = [
     path: "/user/reset-password",
     handler: UserController.resetPassword,
     options: {
+      auth: false,
       validate: {
         payload: Joi.object({
           token: Joi.string().required(),
@@ -37,7 +38,6 @@ module.exports = [
       },
     },
   },
-
   {
     method: "DELETE",
     path: "/user/account",
